@@ -1,6 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { RoleCode } from '../../config/roleCode';
+import { makeSalt, encryptPassword } from '../../utils/cryptogram';
 
 @Injectable()
 export class UserService {
@@ -10,54 +12,62 @@ export class UserService {
   ) {}
 
   /** 查找所有用户 */
-  async findAll(): Promise<User[]> {
-    return await this.userRepo.find();
+  async findAll(): Promise<any> {
+    try {
+      return await this.userRepo.find();
+    } catch (err) {
+      return err;
+    }
   }
 
   /** 根据条件查找用户 */
-  async findOne(userName: string): Promise<any | null> {
+  async findOne(userName: string): Promise<any | undefined> {
     try {
-      const user = null;
-      return user;
-    } catch (error) {
-      console.error(error);
+      return await this.userRepo.findOne({ userName: userName });
+    } catch (err) {
       return void 0;
     }
   }
 
   /** 根据id查找用户 */
-  async findById(id: number): Promise<any | null> {
-    return [];
+  async findById(id: number): Promise<any | undefined> {
+    try {
+      return await this.userRepo.findOne({ id });
+    } catch (err) {
+      return void 0;
+    }
   }
 
-  /**
-   * 注册
-   * @param requestBody 请求体
-   */
+  /** 注册 */
   async register(requestBody: any): Promise<any> {
     const { userName, password } = requestBody;
-    const user = await this.findOne(userName);
-    if (user) {
-      return {
-        code: 400,
-        msg: '用户已存在',
-      };
+    const res = await this.findOne(userName);
+    if (res !== undefined) {
+      return '用户已存在';
     }
+    const salt = makeSalt(); // 制作密码盐
+    const hashPwd = encryptPassword(password, salt); // 加密密码
+    const userData = new User();
+    userData.userName = userName;
+    userData.nickName = userName;
+    userData.password = hashPwd;
+    userData.passwordSalt = salt;
+    /** 默认是1 */
+    userData.role = RoleCode.Default;
     try {
-      const userData = new User();
-      userData.userName = userName;
-      userData.nickName = userName;
-      userData.password = password;
-      await this.userRepo.save(userData);
-      return {
-        code: 200,
-        msg: 'Success',
-      };
-    } catch (error) {
-      return {
-        code: 503,
-        msg: `Service error: ${error}`,
-      };
+      return await this.userRepo.save(userData);
+    } catch (err) {
+      return err;
+    }
+  }
+
+  /** 编辑用户信息 */
+  async edit(requestBody: any): Promise<any> {
+    console.log('编辑用户信息', requestBody);
+    try {
+      return '';
+    } catch (err) {
+      return err;
     }
   }
 }
