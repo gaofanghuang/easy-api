@@ -21,9 +21,9 @@ export class AnyExceptionFilter implements ExceptionFilter {
     Logger.error(logFormat);
     // 设置返回的状态码、请求头、发送错误信息
     const errorResponse = {
-      ReturnCode: 0,
-      ErrorMassage: exception,
-      Data: null
+      code: 0,
+      msg: exception,
+      data: null
     };
     response.status(status);
     response.header('Content-Type', 'application/json; charset=utf-8');

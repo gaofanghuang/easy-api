@@ -8,6 +8,8 @@ import { AnyExceptionFilter } from './filter/any-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // 处理跨域
+  app.enableCors();
   // For parsing application/json
   app.use(express.json());
   // For parsing application/x-www-form-urlencoded

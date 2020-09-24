@@ -19,9 +19,9 @@ export class TransformInterceptor implements NestInterceptor {
         Logger.info(logFormat);
         Logger.access(logFormat);
         return {
-          ReturnCode: 0,
-          ErrorMassage: null,
-          Data: data
+          code: 0,
+          msg: null,
+          data
         };
       })
     );
