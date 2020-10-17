@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user.service';
 import { JwtService } from '@nestjs/jwt';
-import { encryptPassword } from 'src/utils/cryptogram';
+import { encryptPassword } from 'src/service/utils/cryptogram';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
   // JWT验证 - Step 2: 校验用户信息
   async validateUser(userName: string, password: string): Promise<any> {
     console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findOne(userName);
+    const user = await this.usersService.findList({userName})
     if (user !== undefined) {
       const hashedPassword = user.password;
       const salt = user.passwordSalt;

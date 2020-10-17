@@ -2,7 +2,7 @@ import { Controller, Get, Param, Post, Body, UseGuards, Patch, UsePipes } from '
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from 'src/app/user/auth/auth.service';
 import { UserService } from './user.service';
-import { ValidationPipe } from 'src/pipe/validation.pipe';
+import { ValidationPipe } from 'src/service/http/validation.pipe';
 import { LoginRegisterDTO } from './user.dto';
 
 @Controller('user')
@@ -11,7 +11,7 @@ export class UserController {
 
   /** 获取用户信息 */
   @Get(':id')
-  async findOne(@Param() params): Promise<any> {
+  async findById(@Param() params): Promise<any> {
     try {
       let user = await this.user.findById(params.id);
       user = this.filterSth(user);

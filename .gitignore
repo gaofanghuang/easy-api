@@ -35,3 +35,5 @@ lerna-debug.log*
 src/services/config/db.ts
 yarn.lock
 src/config/jwtSecret.ts
+
+.env

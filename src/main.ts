@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import { logger } from './middleware/logger.middleware';
-import { TransformInterceptor } from './interceptor/transform.interceptor';
-import { HttpExceptionFilter } from './filter/http-exception.filter';
-import { AnyExceptionFilter } from './filter/any-exception.filter';
+import { logger } from 'src/service/http/logger.middleware';
+import { TransformInterceptor } from 'src/service/http/transform.interceptor';
+import { HttpExceptionFilter } from 'src/service/http/http-exception.filter';
+import { AnyExceptionFilter } from 'src/service/http/any-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

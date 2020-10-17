@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
-import { Logger } from 'src/utils/log4js';
+import { Logger } from 'src/service/utils/log4js';
 
 @Catch()
 export class AnyExceptionFilter implements ExceptionFilter {
@@ -22,7 +22,7 @@ export class AnyExceptionFilter implements ExceptionFilter {
     // 设置返回的状态码、请求头、发送错误信息
     const errorResponse = {
       code: 0,
-      msg: exception,
+      message: exception,
       data: null
     };
     response.status(status);

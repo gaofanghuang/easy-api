@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
-import { RoleCode } from '../../config/roleCode';
-import { makeSalt, encryptPassword } from '../../utils/cryptogram';
+import { User } from 'src/entity/user.entity';
+import { RoleCode } from 'src/config/const';
+import { makeSalt, encryptPassword } from 'src/service/utils/cryptogram';
 
 @Injectable()
 export class UserService {
@@ -11,7 +11,7 @@ export class UserService {
     private readonly userRepo: Repository<User>
   ) {}
 
-  /** 查找所有用户 */
+  /** 查找所有用户列表 */
   async findAll(): Promise<any> {
     try {
       return await this.userRepo.find();
@@ -20,10 +20,10 @@ export class UserService {
     }
   }
 
-  /** 根据条件查找用户 */
-  async findOne(userName: string): Promise<any | undefined> {
+  /** 根据条件查找用户列表 */
+  async findList(query: { userName: string }): Promise<any | undefined> {
     try {
-      return await this.userRepo.findOne({ userName: userName });
+      return await this.userRepo.find(query);
     } catch (err) {
       return void 0;
     }
@@ -41,8 +41,8 @@ export class UserService {
   /** 注册 */
   async register(requestBody: any): Promise<any> {
     const { userName, password } = requestBody;
-    const res = await this.findOne(userName);
-    if (res !== undefined) {
+    const res = await this.findList({userName});
+    if (res !== undefined || res.length > 0) {
       return '用户已存在';
     }
     const salt = makeSalt(); // 制作密码盐
