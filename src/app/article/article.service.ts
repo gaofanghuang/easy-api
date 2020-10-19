@@ -39,4 +39,24 @@ export class ArticleService {
       return void 0;
     }
   }
+
+  /** 新增文章 */
+  async add(requestBody: any): Promise<any> {
+    const { title, category, tag, content } = requestBody;
+    const res = await this.findList({title});
+    if (res !== undefined || res.length > 0) {
+      return '文章已存在';
+    }
+    const articleData = new Article();
+    articleData.title = title;
+    articleData.author = 'editor';
+    articleData.category = category;
+    articleData.tag = tag;
+    articleData.content = content;
+    try {
+      return await this.articleRepo.save(articleData);
+    } catch (err) {
+      return err;
+    }
+  }
 }

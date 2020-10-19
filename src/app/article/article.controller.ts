@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Param, Post, Body, UseGuards, Patch, UsePipes } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { EditArticleDTO } from './article.dto';
+import { AuthGuard } from '@nestjs/passport';
 import { Logger } from 'src/service/utils/log4js';
 
 @Controller('article')
@@ -29,5 +30,13 @@ export class ArticleController {
     } catch (err) {
       return err;
     }
+  }
+
+  /** 新增文章 */
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  async add(@Body() body: EditArticleDTO): Promise<any> {
+    let article = await this.article.add(body);
+    return article;
   }
 }
