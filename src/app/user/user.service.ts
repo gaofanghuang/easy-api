@@ -41,23 +41,24 @@ export class UserService {
   /** 注册 */
   async register(requestBody: any): Promise<any> {
     const { userName, password } = requestBody;
-    const res = await this.findList({userName});
-    if (res !== undefined || res.length > 0) {
+    const res = await this.findList({ userName });
+    if (res == undefined || res.length === 0) {
+      const salt = makeSalt(); // 制作密码盐
+      const hashPwd = encryptPassword(password, salt); // 加密密码
+      const userData = new User();
+      userData.userName = userName;
+      userData.nickName = userName;
+      userData.password = hashPwd;
+      userData.passwordSalt = salt;
+      /** 默认是1 */
+      userData.role = RoleCode.Default;
+      try {
+        return await this.userRepo.save(userData);
+      } catch (err) {
+        return err;
+      }
+    } else {
       return '用户已存在';
-    }
-    const salt = makeSalt(); // 制作密码盐
-    const hashPwd = encryptPassword(password, salt); // 加密密码
-    const userData = new User();
-    userData.userName = userName;
-    userData.nickName = userName;
-    userData.password = hashPwd;
-    userData.passwordSalt = salt;
-    /** 默认是1 */
-    userData.role = RoleCode.Default;
-    try {
-      return await this.userRepo.save(userData);
-    } catch (err) {
-      return err;
     }
   }
 

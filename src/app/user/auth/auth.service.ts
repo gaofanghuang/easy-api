@@ -15,14 +15,16 @@ export class AuthService {
   async validateUser(userName: string, password: string): Promise<any> {
     console.log('JWT验证 - Step 2: 校验用户信息');
     const user = await this.usersService.findList({userName})
-    if (user !== undefined) {
-      const hashedPassword = user.password;
-      const salt = user.passwordSalt;
+    
+    if (user !== undefined && user.length > 0) {
+      const hashedPassword = user[0].password;
+      const salt = user[0].passwordSalt;
       // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等
       const hashPassword = encryptPassword(password, salt);
+      console.log(user[0], user[0].password, hashPassword, hashedPassword === hashPassword)
       if (hashedPassword === hashPassword) {
         // 密码正确
-        return user;
+        return user[0];
       } else {
         // 密码错误
         throw new BadRequestException('密码错误');
@@ -45,7 +47,8 @@ export class AuthService {
       const token = this.jwtService.sign(payload);
       return token;
     } catch (error) {
-      throw new BadRequestException('密码错误');
+      console.log(error);
+      throw new BadRequestException('密码错误2');
     }
   }
 }
