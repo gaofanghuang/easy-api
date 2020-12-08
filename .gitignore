@@ -37,3 +37,4 @@ yarn.lock
 src/config/jwtSecret.ts
 
 .env
+src/config/db.ts
