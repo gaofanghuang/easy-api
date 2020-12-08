@@ -1,4 +1,14 @@
-import { Controller, Get, Req, Param, Post, Body, UseGuards, Patch, UsePipes } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Param,
+  Post,
+  Body,
+  UseGuards,
+  Patch,
+  UsePipes,
+} from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { EditArticleDTO } from './article.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -36,6 +46,23 @@ export class ArticleController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async add(@Body() body: EditArticleDTO): Promise<any> {
+    const postData = { ...body };
+    // 校验非必填数据
+    if (!postData.title) {
+      postData.title = '';
+    }
+    if (!postData.author) {
+      postData.author = '';
+    }
+    if (!postData.category) {
+      postData.category = '';
+    }
+    if (!postData.tag) {
+      postData.tag = '';
+    }
+    if (!postData.author) {
+      postData.author = '';
+    }
     let article = await this.article.add(body);
     return article;
   }

@@ -5,10 +5,10 @@ export class Article {
   @PrimaryGeneratedColumn({ comment: '主键id' })
   id: number;
 
-  @Column({ length: 50, comment: '标题', unique: true })
+  @Column({ length: 50, comment: '标题' })
   title: string;
 
-  @Column({ length: 50, comment: '作者' })
+  @Column({ length: 50, comment: '作者'})
   author: string;
 
   @Column({ length: 50, comment: '分类'})
@@ -17,7 +17,7 @@ export class Article {
   @Column({ length: 200, comment: '标签'})
   tag: string;
 
-  @Column({ length: 200, comment: '内容'})
+  @Column({ length: 200, comment: '内容', unique: true})
   content: string;
 
   @Column({ type: 'timestamp', default: () => 'current_timestamp' })

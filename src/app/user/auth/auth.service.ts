@@ -39,7 +39,6 @@ export class AuthService {
     const payload = {
       userName: user.userName,
       id: user.id,
-      nickName: user.nickName,
       role: user.role,
     };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
